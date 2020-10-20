@@ -47,14 +47,15 @@ function HandleSearchResponse(response)
 }
 
 // Get the data from the API
-function DoSearchRequest()
+function DoSearchRequest() //typeSelection
 {
 	var request = new XMLHttpRequest();
-	var url = "https://www.thecocktaildb.com/api/json/v2/9973533/search.php?s=margarita";
-	//var thesearch = document.getElementById("mysearch").value;
-	request.open("GET", url);
-	request.send();
+	var type = "s" //typeSelection
+	var input = document.getElementById("mysearch").value;
+	var url = "https://www.thecocktaildb.com/api/json/v2/9973533/search.php?" + type + "=" + input;
 
+	request.open("GET", url, true);
+	
 	request.onreadystatechange = function()
 	{
 		if(this.readyState==4 && this.status==200)
@@ -62,6 +63,8 @@ function DoSearchRequest()
 			HandleSearchResponse(this.responseText)
 		}
 	}
+
+	request.send();
 }
 </script>
 
