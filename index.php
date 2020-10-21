@@ -1,5 +1,6 @@
 <html>
 <style>
+/* Yeah I copy pasted this from w3schools. Wutcha gonna do about it? */
 #SearchResults {
   font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
   border-collapse: collapse;
@@ -7,7 +8,7 @@
 }
 
 #SearchResults td, #customers th {
-  border: 1px solid #ddd;
+  border: 1px solid #ddd;s
   padding: 8px;
 }
 
@@ -23,7 +24,7 @@
 </style>
 
 <script>
-// LOGIN STUFF
+// LOGIN & REGISTRATION STUFF
 function HandleLoginResponse(response)
 {
 	var text = JSON.parse(response);	
@@ -47,8 +48,9 @@ function SendLoginRequest()
 	request.send("type=login&uname="+username+"&pword="+password); // request we're sending thru rabbit?
 }
 
-// Send the request to the API
-function SendRequest(url)
+
+// API Search stuff
+function SendRequest(url) // Send the request to the API
 {
 	var request = new XMLHttpRequest();
 	request.open("GET", url, true);
@@ -62,24 +64,25 @@ function SendRequest(url)
 	request.send();
 }
 
-// Handle the data we got from the API
-function HandleResponse(response)
+
+function HandleResponse(response) // Handle the data we got from the API
 {
 	var data = JSON.parse(response); 	// parse the response into json array: data
 	console.log(data);			// print to console for testing
-	var txt = "";				// The text variable we'll be manipulating to insert our data to the page
+	var txt = "";				// The text variable we'll be manipulating to insert our data into the page
+	
 	txt += "<table id='SearchResults' border='1'>"
 	
 	if (data.drinks)
 	{
 		for (drink in data.drinks)
 		{	
-			txt += "<tr><th>Drink "+drink+"</th></tr>";	// The drink # we're on
+			txt += "<tr><th>"+drink+"</th></tr>";	// The obj # we're on, usually a drink
 			for (obj in data.drinks[drink]) 
 			{	
 				if (data.drinks[drink][String(obj)] != null) // If there's no info, don't include it
 				{
-					txt += "<tr><td>"+obj+"</td><td>"+data.drinks[drink][String(obj)]+"</td></tr>"; // Insert keys & values for drink #
+					txt += "<tr><td>"+obj+"</td><td>"+data.drinks[drink][String(obj)]+"</td></tr>"; // Insert keys & values for obj #
 				}
 			}
 		}
@@ -100,11 +103,7 @@ function HandleResponse(response)
       	document.getElementById("searchResponse").innerHTML = txt;
 }
 
-function ClearResults()
-{
-	document.getElementById("searchResponse").innerHTML = "";
-}
-
+// SEARCH FUNCTIONS
 // Do a search - Get info from HTML then send request
 function DoSearch() 
 {
@@ -136,11 +135,18 @@ function DoLookup()
 	var url = "https://www.thecocktaildb.com/api/json/v2/9973533/lookup.php?" + type + "=" + input; // the url to use to for the request, using input
 	SendRequest(url);
 }
+
+// Clear search results from the page - Not super necessary, but tidy
+function ClearResults()
+{
+	document.getElementById("searchResponse").innerHTML = "";
+}
 </script>
 
 
 <body>
 <h3>Search</h3>
+<p>Lookup cocktails or ingredients</p>
 <select name="search type" id="searchType">
 <option value="s">Cocktail</option>
 <option value="f">First letter</option>
@@ -151,32 +157,66 @@ function DoLookup()
 
 <hr>
 
+<!--
+Filter search can mainly be used for multi-ingredient searches... 
+Might substitute the ingredient search for search.php with this?
+
+Filter by multi-ingredient (only available to $2+ Patreon supporters)
+https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=Dry_Vermouth,Gin,Anis
+
+Filter by alcoholic
+https://www.thecocktaildb.com/api/json/v1/1/filter.php?a=
+Alcoholic, Non_Alocoholic, Optional_alcohol
+
+Filter by Category
+https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=
+Ordinary Drink, Cocktail, Milk / Float / Shake, Other/Unknown, Cocoa, Shot, Coffe/Tea, Homemade Liqueur, Punch / Party Drink, Beer, Soft Drink / Soda
+
+Filter by Glass
+https://www.thecocktaildb.com/api/json/v1/1/filter.php?g=Cocktail_glass
+https://www.thecocktaildb.com/api/json/v1/1/filter.php?g=Champagne_flute
+-->
 <h3>Filter</h3>
-<select name="filter type" id="filterType">
-<option value="i">Ingredient</option>
-<option value="i">Ingredient</option>
+<p>Separate ingredients with commas</p>
+<select name="filter type" id="filterType"><option value="i">Multi/Ingredient</option></select>
+
+<select name="alcoholicFilter" id="alcoholicFilter">
+<option value="filter.php?a=Alcoholic">Alcoholic</option>
+<option value="filter.php?a=Non_Alcoholic">Non-Alcoholic</option>
 </select>
+
 <input type="text" placeholder="Enter your search keywords" id="myFilter" />
 <button onclick="DoFilter()">Search</button>
 
 <hr>
 
+<!--
+List will basically load up some results determined by the API
+Gonna shove some other stuff in here as well.
+I'll have to explore the categories a bit more to set up proper filter searches
+-->
 <h3>List</h3>
 <select name="list type" id="listType">
 <option value="random.php">1 Random</option>
 <option value="randomselection.php">10 Random</option>
 <option value="popular.php">Popular</option>
 <option value="latest.php">Latest</option>
-<option value="filter.php?a=Alcoholic">Alcoholic</option>
-<option value="filter.php?a=Non_Alcoholic">Non-Alcoholic</option>
+<option value="list.php?c=list">Categories</option>
+<option value="list.php?g=list">Glasses</option>
+<option value="list.php?i=list">Ingredients</option>
+<option value="list.php?a=list">Alcoholic Filters</option>
 </select>
 <button onclick="DoList()">List</button>
 
 <hr>
 
+<!--
+ID Lookup does exactly what it says; the API has IDs for each cocktail & ingredient
+Note that they're searched for with different prefixes (i vs iid)
+-->
 <h3>ID Lookup</h3>
 <select name="lookup type" id="lookupType">
-<option value="i">Cocktail ID</option>
+<option value="i">Drink ID</option>
 <option value="iid">Ingredient ID</option>
 </select>
 <input type="text" placeholder="Enter your search keywords" id="myLookup" />
@@ -184,11 +224,18 @@ function DoLookup()
 
 <hr>
 
+<!--
+Search results get inserted here
+-->
 <button onclick="ClearResults()">Clear Results</button>
 <div id="searchResponse"></div>
 
 <hr>
 
+<!--
+Login & Registration is here
+Might be wise to incorporate some sort of static siderbar\navbar for this.
+-->
 <h3>Register</h3>
 it ain't done
 <h3>Login</h3>
