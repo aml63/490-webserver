@@ -1,20 +1,26 @@
 <html>
 <style>
 /* Yeah I copy pasted this from w3schools. Wutcha gonna do about it? */
-#SearchResults {
+#SearchResults 
+{
   font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
   border-collapse: collapse;
   width: 100%;
 }
 
-#SearchResults td, #customers th {
+#SearchResults td, #customers th 
+{
   border: 1px solid #ddd;s
   padding: 8px;
 }
 
-#SearchResults tr:nth-child(even){background-color: #f2f2f2;}
+#SearchResults tr:nth-child(even)
+{
+	background-color: #f2f2f2;
+}
 
-#SearchResults th {
+#SearchResults th 
+{
   padding-top: 12px;
   padding-bottom: 12px;
   text-align: left;
@@ -49,7 +55,7 @@ function SendLoginRequest()
 }
 
 
-// API Search stuff
+// API SEARCH REQUEST STUFF
 function SendRequest(url) // Send the request to the API
 {
 	var request = new XMLHttpRequest();
@@ -82,7 +88,10 @@ function HandleResponse(response) // Handle the data we got from the API
 			{	
 				if (data.drinks[drink][String(obj)] != null) // If there's no info, don't include it
 				{
-					txt += "<tr><td>"+obj+"</td><td>"+data.drinks[drink][String(obj)]+"</td></tr>"; // Insert keys & values for obj
+					if (String(obj) == "strDrinkThumb")
+						txt += "<tr><td>"+obj+"</td><td><img src='"+data.drinks[drink][String(obj)]+"' width='300' height='300'></td></tr>"; // Insert keys & values for obj
+					else
+						txt += "<tr><td>"+obj+"</td><td>"+data.drinks[drink][String(obj)]+"</td></tr>"; // Insert keys & values for obj
 				}
 			}
 		}
