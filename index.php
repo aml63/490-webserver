@@ -104,16 +104,16 @@ function HandleResponse(response) // Handle the data we got from the API
       	document.getElementById("searchResponse").innerHTML = txt;
 }
 
+
 // SEARCH FUNCTIONS
 // Do a search - Get info from HTML then send request
 function DoSearch() 
 {
 	var type = document.getElementById("searchType").value;		// the type of search
 	var input = document.getElementById("mySearch").value;		// what the user typed in the search input
-	var url = "https://www.thecocktaildb.com/api/json/v2/9973533/search.php?" + type + "=" + input; // the url to use to for the request, using input
+	var url = "https://www.thecocktaildb.com/api/json/v2/9973533/" + type + input; // the url to use to for the request, using input
 	SendRequest(url);
 }
-
 function DoFilter()
 {
 	// myFilter
@@ -122,23 +122,22 @@ function DoFilter()
 	// glassFilter
 	
 	//var type 		= document.getElementById("filterType").value;		// the type of search
-	var input 		= document.getElementById("myFilter").value;		// what the user typed in the search input
+	//var input 		= document.getElementById("myFilter").value;		// what the user typed in the search input
 	var alcoholic 	= document.getElementById("alcoholicFilter").value;
 	var category 	= document.getElementById("categoryFilter").value;
 	var glass 		= document.getElementById("glassFilter").value;
 	
-	var url = "https://www.thecocktaildb.com/api/json/v2/9973533/filter.php?" + alcoholic + "&" + category + "&" + glass + "&" + input;
+	var url = "https://www.thecocktaildb.com/api/json/v2/9973533/filter.php?" + alcoholic + "&" + category + "&" + glass;
 	
 	SendRequest(url);
+	console.log(url);
 }
-
 function DoList()
 {
 	var type = document.getElementById("listType").value;		// the type of search
 	var url = "https://www.thecocktaildb.com/api/json/v2/9973533/" + type; // the url to use to for the request, using input
 	SendRequest(url);
 }
-
 function DoLookup()
 {
 	var type = document.getElementById("lookupType").value;		// the type of search
@@ -147,23 +146,29 @@ function DoLookup()
 	SendRequest(url);
 }
 
+
 // Clear search results from the page - Not super necessary, but tidy
 function ClearResults()
 {
 	document.getElementById("searchResponse").innerHTML = "";
 }
 </script>
+
+
 <h1>Liquor Cabinet</h1>
 
 <hr>
 
 <body>
 <h3>Search</h3>
-<p>Lookup recipes for drinks or details on specific ingredients</p>
+<p>Lookup drinks by name or first letter.</p>
+<p>Lookup ingredient by name.</p>
+<p>Lookup recipes with ingredient combinations. (ex: rum,coke)</p>
 <select name="search type" id="searchType">
-<option value="s">Cocktail</option>
-<option value="f">First letter</option>
-<option value="i">Ingredient</option>
+<option value="search.php?s=">Drink name</option>
+<option value="search.php?f=">First letter</option>
+<option value="search.php?i=">Ingredient</option>
+<option value="filter.php?i=">Multi-Ingredient</option>
 </select>
 <input type="text" placeholder="Enter your search keywords" id="mySearch" />
 <button onclick="DoSearch()">Search</button>
@@ -185,7 +190,7 @@ https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=
 Filter by Glass
 https://www.thecocktaildb.com/api/json/v1/1/filter.php?g=
 -->
-<h3>Filter / Ingredient Search</h3>
+<h3>Filter Search</h3>
 <p>Lookup specific drinks using available filters</p>
 <!-- Alcoholic Filter -->
 <select name="alcoholicFilter" id="alcoholicFilter">
@@ -243,7 +248,6 @@ https://www.thecocktaildb.com/api/json/v1/1/filter.php?g=
 <option value="g=Wine_Glass">Wine Glass</option>
 </select>
 
-<input type="text" placeholder="Enter your search keywords" id="myFilter" />
 <button onclick="DoFilter()">Search</button>
 
 <hr>
@@ -280,7 +284,7 @@ Note that they're searched for with different prefixes (i vs iid)
 <option value="iid">Ingredient ID</option>
 </select>
 <input type="text" placeholder="Enter your search keywords" id="myLookup" />
-<button onclick="DoSearch()">Search</button>
+<button onclick="DoLookup()">Search</button>
 
 <hr>
 
