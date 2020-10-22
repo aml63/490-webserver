@@ -172,12 +172,12 @@ function ClearResults()
 <h3>Search</h3>
 <p>Lookup drinks by name or first letter.</p>
 <p>Lookup ingredient by name.</p>
-<p>Lookup recipes with ingredient combinations. (ex: rum,coke)</p>
+<p>Lookup recipes with ingredient combinations. ( EX: rum,vodka,gin )</p>
 <select name="search type" id="searchType">
 <option value="search.php?s=">Drink name</option>
 <option value="search.php?f=">First letter</option>
 <option value="search.php?i=">Ingredient</option>
-<option value="filter.php?i=">Multi-Ingredient</option>
+<option value="filter.php?i=">Ingredient-Combo</option>
 </select>
 <input type="text" placeholder="Enter your search keywords" id="mySearch" />
 <button onclick="DoSearch()">Search</button>
