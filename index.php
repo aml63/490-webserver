@@ -116,9 +116,19 @@ function DoSearch()
 
 function DoFilter()
 {
-	var type = document.getElementById("filterType").value;		// the type of search
-	var input = document.getElementById("myFilter").value;		// what the user typed in the search input
-	var url = "https://www.thecocktaildb.com/api/json/v2/9973533/filter.php?" + type + "=" + input; // the url to use to for the request, using input
+	// myFilter
+	// alcoholicFilter
+	// categoryFilter
+	// glassFilter
+	
+	//var type 		= document.getElementById("filterType").value;		// the type of search
+	var input 		= document.getElementById("myFilter").value;		// what the user typed in the search input
+	var alcoholic 	= document.getElementById("alcoholicFilter").value;
+	var category 	= document.getElementById("categoryFilter").value;
+	var glass 		= document.getElementById("glassFilter").value;
+	
+	var url = "https://www.thecocktaildb.com/api/json/v2/9973533/filter.php?" + alcoholic + "&" + category + "&" + glass + "&" + input;
+	
 	SendRequest(url);
 }
 
@@ -149,7 +159,7 @@ function ClearResults()
 
 <body>
 <h3>Search</h3>
-<p>Lookup cocktails or ingredients</p>
+<p>Lookup recipes for drinks or details on specific ingredients</p>
 <select name="search type" id="searchType">
 <option value="s">Cocktail</option>
 <option value="f">First letter</option>
@@ -174,20 +184,15 @@ https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=
 
 Filter by Glass
 https://www.thecocktaildb.com/api/json/v1/1/filter.php?g=
-Highball glass, Cocktail glass, Old-fashioned glass, Collins glass, Pousse cafe glass, Champagne flute, Whiskey sour glass, Cordial glass, Brandy snifter, White wine glass, Nick and Nora Glass, Hurricane glass, Coffee mug, Shot glass, Jar, Irish coffee cup, Punch bowl, Pitcher, Pint glass, Copper Mug, Wine Glass, Beer mug, Margarita/Coupette glass, Beer pilsner, Beer Glass, Parfait glass, Mason jar, Margarita glass, Martini Glass, Balloon Glass, Coupe Glass
-
-<select name="filter type" id="filterType"><option value="i">Multi/Ingredient</option></select>
 -->
 <h3>Filter / Ingredient Search</h3>
 <p>Lookup specific drinks using available filters</p>
-
 <!-- Alcoholic Filter -->
 <select name="alcoholicFilter" id="alcoholicFilter">
 <option value="a=Alcoholic">Alcoholic</option>
 <option value="a=Non_Alcoholic">Non-Alcoholic</option>
 <option value="a=Optional_alcohol">Optional Alcohol</option>
 </select>
-
 <!-- Category Filter -->
 <select name="categoryFilter" id="categoryFilter">
 <option value="">Any</option>
@@ -203,7 +208,6 @@ Highball glass, Cocktail glass, Old-fashioned glass, Collins glass, Pousse cafe 
 <option value="c=Soft_Drink_/_Soda">Soft Drink / Soda</option>
 <option value="c=milk_/_float_/_shake">Milk / Float / Shake</option>
 </select>
-
 <!-- Category Filter -->
 <select name="glassFilter" id="glassFilter">
 <option value="">Any</option>
@@ -250,6 +254,7 @@ Gonna shove some other stuff in here as well.
 I'll have to explore the categories a bit more to set up proper filter searches
 -->
 <h3>List</h3>
+<p>Pull up a set list of drinks</p>
 <select name="list type" id="listType">
 <option value="random.php">1 Random</option>
 <option value="randomselection.php">10 Random</option>
@@ -269,6 +274,7 @@ ID Lookup does exactly what it says; the API has IDs for each cocktail & ingredi
 Note that they're searched for with different prefixes (i vs iid)
 -->
 <h3>ID Lookup</h3>
+<p>Find a drink recipe or an ingredient's info from its ID</p>
 <select name="lookup type" id="lookupType">
 <option value="i">Drink ID</option>
 <option value="iid">Ingredient ID</option>
