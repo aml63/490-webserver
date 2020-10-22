@@ -204,6 +204,41 @@ Highball glass, Cocktail glass, Old-fashioned glass, Collins glass, Pousse cafe 
 <option value="c=Soft_Drink_/_Soda">Soft Drink / Soda</option>
 </select>
 
+<!-- Category Filter -->
+<select name="glassFilter" id="glassFilter">
+<option value="">Any</option>
+<option value="g=Highball_glass">Highball Glass</option>
+<option value="g=Cocktail_glass">Cocktail Glass</option>
+<option value="g=Old-fashioned_glass">Old-Fashioned Glass</option>
+<option value="g=Collins_glass">Collins Glass</option>
+<option value="g=Pousse_cafe_glass">Pousse Cafe Glass</option>
+<option value="g=Champagne_flute">Champagne Flute</option>
+<option value="g=Whiskey_sour_glass">Whiskey Sour Glass</option>
+<option value="g=Cordial_glass">Cordial Glass</option>
+<option value="g=Brandy_snifter">Brandy Snifter</option>
+<option value="g=White_wine_glass">White Wine Glass</option>
+<option value="g=Nick_and_Nora_Glass">Nick and Nora Glass</option>
+<option value="g=Hurricane_glass">Hurricane Glass</option>
+<option value="g=Coffee_mug">Coffee Mug</option>
+<option value="g=Shot_glass">Shot Glass</option>
+<option value="g=Jar">Jar</option>
+<option value="g=Irish_coffee_cup">Irish Coffee Cup</option>
+<option value="g=Punch_bowl">Punch Bowl</option>
+<option value="g=Pitcher">Pitcher</option>
+<option value="g=Pint_glass">Pint Glass</option>
+<option value="g=Copper_Mug">Copper Mug</option>
+<option value="g=Wine_Glass">Wine Glass</option>
+<option value="g=Beer_mug">Beer Mug</option>
+<option value="g=Margarita/Coupette_glass">Margarita/Coupette Glass</option>
+<option value="g=Beer_pilsner">Beer Pilsner</option>
+<option value="g=Parfait_glass">Parfait Glass</option>
+<option value="g=Mason_jar">Mason Jar</option>
+<option value="g=Margarita_glass">Margarita Glass</option>
+<option value="g=Martini_Glass">Martini Glass</option>
+<option value="g=Balloon_Glass">Balloon Glass</option>
+<option value="g=Coupe_Glass">Coupe Glass</option>
+</select>
+
 <input type="text" placeholder="Enter your search keywords" id="myFilter" />
 <button onclick="DoFilter()">Search</button>
 
