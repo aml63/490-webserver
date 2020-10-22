@@ -82,7 +82,7 @@ function HandleResponse(response) // Handle the data we got from the API
 			{	
 				if (data.drinks[drink][String(obj)] != null) // If there's no info, don't include it
 				{
-					txt += "<tr><td>"+obj+"</td><td>"+data.drinks[drink][String(obj)]+"</td></tr>"; // Insert keys & values for obj #
+					txt += "<tr><td>"+obj+"</td><td>"+data.drinks[drink][String(obj)]+"</td></tr>"; // Insert keys & values for obj
 				}
 			}
 		}
@@ -91,9 +91,10 @@ function HandleResponse(response) // Handle the data we got from the API
 	{
 		for (ingredient in data.ingredients)
 		{
+			txt += "<tr><th>"+drink+"</th></tr>";	// The obj # we're on, in this case an ingredient
 			for (obj in data.ingredients[ingredient])
 			{
-				txt += "<tr><td>"+obj+"</td><td>"+data.ingredients[ingredient][String(obj)]+"</td></tr>"; // Insert keys & values for
+				txt += "<tr><td>"+obj+"</td><td>"+data.ingredients[ingredient][String(obj)]+"</td></tr>"; // Insert keys & values for obj
 			}
 		}
 	}
@@ -142,7 +143,9 @@ function ClearResults()
 	document.getElementById("searchResponse").innerHTML = "";
 }
 </script>
+<h1>Liquor Cabinet</h1>
 
+<hr>
 
 <body>
 <h3>Search</h3>
@@ -159,30 +162,46 @@ function ClearResults()
 
 <!--
 Filter search can mainly be used for multi-ingredient searches... 
-Might substitute the ingredient search for search.php with this?
 
-Filter by multi-ingredient (only available to $2+ Patreon supporters)
+Filter by multi-ingredient
 https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=Dry_Vermouth,Gin,Anis
 
 Filter by alcoholic
 https://www.thecocktaildb.com/api/json/v1/1/filter.php?a=
-Alcoholic, Non_Alocoholic, Optional_alcohol
 
 Filter by Category
 https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=
-Ordinary Drink, Cocktail, Milk / Float / Shake, Other/Unknown, Cocoa, Shot, Coffe/Tea, Homemade Liqueur, Punch / Party Drink, Beer, Soft Drink / Soda
 
 Filter by Glass
-https://www.thecocktaildb.com/api/json/v1/1/filter.php?g=Cocktail_glass
-https://www.thecocktaildb.com/api/json/v1/1/filter.php?g=Champagne_flute
--->
-<h3>Filter</h3>
-<p>Separate ingredients with commas</p>
-<select name="filter type" id="filterType"><option value="i">Multi/Ingredient</option></select>
+https://www.thecocktaildb.com/api/json/v1/1/filter.php?g=
+Highball glass, Cocktail glass, Old-fashioned glass, Collins glass, Pousse cafe glass, Champagne flute, Whiskey sour glass, Cordial glass, Brandy snifter, White wine glass, Nick and Nora Glass, Hurricane glass, Coffee mug, Shot glass, Jar, Irish coffee cup, Punch bowl, Pitcher, Pint glass, Copper Mug, Wine Glass, Beer mug, Margarita/Coupette glass, Beer pilsner, Beer Glass, Parfait glass, Mason jar, Margarita glass, Martini Glass, Balloon Glass, Coupe Glass
 
+<select name="filter type" id="filterType"><option value="i">Multi/Ingredient</option></select>
+-->
+<h3>Filter / Ingredient Search</h3>
+<p>Lookup specific drinks using available filters</p>
+
+<!-- Alcoholic Filter -->
 <select name="alcoholicFilter" id="alcoholicFilter">
-<option value="filter.php?a=Alcoholic">Alcoholic</option>
-<option value="filter.php?a=Non_Alcoholic">Non-Alcoholic</option>
+<option value="a=Alcoholic">Alcoholic</option>
+<option value="a=Non_Alcoholic">Non-Alcoholic</option>
+<option value="a=Optional_alcohol">Optional Alcohol</option>
+</select>
+
+<!-- Category Filter -->
+<select name="categoryFilter" id="categoryFilter">
+<option value="">Any</option>
+<option value="c=Ordinary_Drink">Ordinary Drink</option>
+<option value="c=Cocktail">Cocktail</option>
+<option value="c=milk_/_float_/_shake">Milk / Float / Shake</option>
+<option value="c=Other/Unknown">Other/Unknown</option>
+<option value="c=Cocoa">Cocoa</option>
+<option value="c=Shot">Shot</option>
+<option value="c=Coffee_/_Tea">Coffee / Tea</option>
+<option value="c=Homemade_Liqueur">Homemade Liqueur</option>
+<option value="c=Punch_/_Party_Drink">Punch / Party Drink</option>
+<option value="c=Beer">Beer</option>
+<option value="c=Soft_Drink_/_Soda">Soft Drink / Soda</option>
 </select>
 
 <input type="text" placeholder="Enter your search keywords" id="myFilter" />
