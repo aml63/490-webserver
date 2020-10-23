@@ -1,24 +1,38 @@
+<?php 
+session_start(); 
+
+if (!isset($_SESSION['username'])) 
+{
+	$_SESSION['msg'] = "You must log in first";
+	header('location: login.php');
+}
+
+if (isset($_GET['logout'])) 
+{
+	session_destroy();
+	unset($_SESSION['username']);
+	header("location: login.php");
+}
+?>
+
 <html>
 <style>
-/* Yeah I copy pasted this from w3schools. Wutcha gonna do about it? */
+/* Formatting search results*/
 #SearchResults 
 {
   font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
   border-collapse: collapse;
   width: 100%;
 }
-
-#SearchResults td, #customers th 
+#SearchResults td, th 
 {
   border: 1px solid #ddd;s
   padding: 8px;
 }
-
 #SearchResults tr:nth-child(even)
 {
 	background-color: #f2f2f2;
 }
-
 #SearchResults th 
 {
   padding-top: 12px;
@@ -30,37 +44,7 @@
 </style>
 
 <script>
-// LOGIN & REGISTRATION STUFF
-function HandleLoginResponse(response)
-{
-	var text = JSON.parse(response);	
-	
-	console.log(response);
-	
-	if (response == 1)
-	{
-		
-	}
-	
-	document.getElementById("textResponse").innerHTML = "response: "+text+"<p>";
-}
 
-function SendLoginRequest()
-{
-	username = document.getElementById("usr").value;
-	password = document.getElementById("psw").value;
-	var request = new XMLHttpRequest();
-	request.open("POST","login.php",true);
-	request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
-	request.onreadystatechange= function ()
-	{
-		if ((this.readyState == 4)&&(this.status == 200))
-		{
-			HandleLoginResponse(this.responseText);
-		}		
-	}
-	request.send("type=login&uname="+username+"&pword="+password); // request we're sending thru rabbit?
-}
 
 
 // API SEARCH REQUEST STUFF
@@ -77,7 +61,6 @@ function SendRequest(url) // Send the request to the API
 	}
 	request.send();
 }
-
 
 function HandleResponse(response) // Handle the data we got from the API
 {
@@ -171,30 +154,12 @@ function ClearResults()
 }
 </script>
 
-
 <h1>Liquor Cabinet</h1>
 
-
-<hr>
-
-
-<!--
-Login & Registration is here
-Might be wise to incorporate some sort of static siderbar\navbar for this.
--->
-<h3>Register</h3>
-it ain't done
-<h3>Login</h3>
-<div class="log-form">
-	<input type="text" id="usr" placeholder="username" />
-	<input type="password" id="psw" placeholder="password" />
-	<button onclick="SendLoginRequest()">Login</button>
-</div>
-
-<br>
-
-<div id="textResponse"> awaiting response </div>
-
+<?php  if (isset($_SESSION['username'])) : ?>
+    	<p>Logged in as: <strong><?php echo $_SESSION['username']; ?></strong></p>
+    	<p> <a href="index.php?logout='1'" style="color: red;">logout</a> </p>
+<?php endif ?>
 
 <hr>
 
