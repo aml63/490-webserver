@@ -25,7 +25,7 @@ switch ($request["type"])
 		$loginRequest['type'] = "login";
 		$loginRequest['username'] = $request["uname"];
 		$loginRequest['password'] = $request["pword"];
-		$loginRequest['message'] = "gadzooks!";
+		$loginRequest['message'] = "login request";
 		$response = $client->send_request($loginRequest);
 		if ($response == 1)
 		{
@@ -33,6 +33,12 @@ switch ($request["type"])
 		}
 		break;
 	case "register":
+		$regRequest = array();
+		$regRequest['type'] = "register";
+		$regRequest['username'] = $request["uname"];
+		$regRequest['password'] = $request["pword"];
+		$regRequest['message'] = "registration request";
+		$response = $client->send_request($regRequest);
 		break;
 }
 

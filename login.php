@@ -19,6 +19,7 @@ function HandleLoginResponse(response)
 
 function SendLoginRequest()
 {
+	console.log("Doing login request");
 	username = document.getElementById("usr").value;
 	password = document.getElementById("psw").value;
 	var request = new XMLHttpRequest();
@@ -28,6 +29,7 @@ function SendLoginRequest()
 	{
 		if ((this.readyState == 4)&&(this.status == 200))
 		{
+			console.log("Handling login response");
 			HandleLoginResponse(this.responseText);
 		}		
 	}
@@ -40,18 +42,16 @@ function HandleRegisterResponse(response)
 	var text = JSON.parse(response);
 	
 	// Give them a confirmation that their credentials were registered
-	/*
 	if (response == 1)
-		document.location.href = "index.php"
-	else
-		document.getElementById("registerResponse").innerHTML = "Bad Credentials (response: "+text+")<p>";
-	*/
+		document.getElementById("regResponse").innerHTML = "Registered! (code: "+text+")<p>";
+	else if (response == 0)
+		document.getElementById("regResponse").innerHTML = "Already Registered? (code: "+text+")<p>";
 }
 
 function SendRegisterRequest()
 {
-	username = document.getElementById("usr").value;
-	password = document.getElementById("psw").value;
+	username = document.getElementById("regusr").value;
+	password = document.getElementById("regpsw").value;
 	var request = new XMLHttpRequest();
 	request.open("POST","auth.php",true);
 	request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
@@ -64,6 +64,7 @@ function SendRegisterRequest()
 	}
 	request.send("type=register&uname="+username+"&pword="+password); // request we're sending thru rabbit?
 }
+
 </script>
 
 <?php  if (isset($_SESSION['msg'])) : ?>
@@ -82,10 +83,15 @@ Might be wise to incorporate some sort of static siderbar\navbar for this.
 </div>
 <p id="loginResponse">  </p>
 <hr>
+<div class ="reg-form">
+
 <h3>Register</h3>
-	<input type="text" id="usr" placeholder="username" />
-	<input type="password" id="psw" placeholder="password" />
+	<input type="text" id="regusr" placeholder="username" />
+	<input type="password" id="regpsw" placeholder="password" />
 	<button onclick="SendRegisterRequest()">Register</button>
+</div>
+<p id="regResponse">  </p>
+
 </html>
 
 
