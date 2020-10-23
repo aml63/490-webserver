@@ -34,6 +34,14 @@
 function HandleLoginResponse(response)
 {
 	var text = JSON.parse(response);	
+	
+	console.log(response);
+	
+	if (response == 1)
+	{
+		
+	}
+	
 	document.getElementById("textResponse").innerHTML = "response: "+text+"<p>";
 }
 
@@ -165,6 +173,28 @@ function ClearResults()
 
 
 <h1>Liquor Cabinet</h1>
+
+
+<hr>
+
+
+<!--
+Login & Registration is here
+Might be wise to incorporate some sort of static siderbar\navbar for this.
+-->
+<h3>Register</h3>
+it ain't done
+<h3>Login</h3>
+<div class="log-form">
+	<input type="text" id="usr" placeholder="username" />
+	<input type="password" id="psw" placeholder="password" />
+	<button onclick="SendLoginRequest()">Login</button>
+</div>
+
+<br>
+
+<div id="textResponse"> awaiting response </div>
+
 
 <hr>
 
@@ -305,22 +335,7 @@ Search results get inserted here
 
 <hr>
 
-<!--
-Login & Registration is here
-Might be wise to incorporate some sort of static siderbar\navbar for this.
--->
-<h3>Register</h3>
-it ain't done
-<h3>Login</h3>
-<div class="log-form">
-	<input type="text" id="usr" placeholder="username" />
-	<input type="password" id="psw" placeholder="password" />
-	<button onclick="SendLoginRequest()">Login</button>
-</div>
 
-<br>
-
-<div id="textResponse"> awaiting response </div>
 
 </body>
 </html>
