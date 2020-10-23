@@ -31,7 +31,9 @@ switch ($request["type"])
 		{
 			$_SESSION['username'] = $request["uname"];
 		}
-	break;
+		break;
+	case "register":
+		break;
 }
 
 echo json_encode($response);
