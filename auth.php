@@ -40,6 +40,19 @@ switch ($request["type"])
 		$regRequest['message'] = "registration request";
 		$response = $client->send_request($regRequest);
 		break;
+	case "setbio":
+		$setBioRequest = array();
+		$setBioRequest['type'] = "setbio";
+		$setBioRequest['username'] = $request["uname"];
+		$setBioRequest['newBio'] = $request["newbio"];
+		$response = $client->send_request($setBioRequest);
+		break;
+	case "getbio":
+		$getBio = array();
+		$getBio['type'] = "getbio";
+		$getBio['username'] = $request["uname"];
+		$response = $client->send_request($getBio);
+		break;
 }
 
 echo json_encode($response);

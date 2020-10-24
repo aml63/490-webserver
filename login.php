@@ -40,7 +40,6 @@ function SendLoginRequest()
 	{
 		if ((this.readyState == 4)&&(this.status == 200))
 		{
-			console.log("Handling login response");
 			HandleLoginResponse(this.responseText);
 		}		
 	}
