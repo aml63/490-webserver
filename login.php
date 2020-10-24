@@ -1,9 +1,14 @@
-<html>
-
 <?php
 session_start();
+
+if (isset($_SESSION['username'])) 
+{
+	$_SESSION['msg'] = "Already logged in.";
+	header('location: index.php');
+}
 ?>
 
+<html>
 <script>
 // LOGIN & REGISTRATION STUFF
 function HandleLoginResponse(response)
