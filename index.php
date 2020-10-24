@@ -69,7 +69,7 @@ function HandleResponse(response) // Handle the data we got from the API
 			txt += "<tr><th>"+drink+"</th></tr>";	// The obj # we're on, usually a drink
 			for (obj in data.drinks[drink]) 
 			{	
-				if (data.drinks[drink][String(obj)] != null) // If there's no info, don't include it
+				if (data.drinks[drink][String(obj)] != null) // Only include keys with values
 				{
 					if (String(obj) == "strCreativeCommonsConfirmed" || String(obj) == "strInstructionsDE") // Skip these
 						continue;
@@ -151,8 +151,9 @@ function ClearResults()
 <h1>Liquor Cabinet</h1>
 
 <?php  if (isset($_SESSION['username'])) : ?>
-    	<p>Logged in as: <strong><?php echo $_SESSION['username']; ?></strong></p>
-    	<p> <a href="index.php?logout='1'" style="color: red;">logout</a> </p>
+	<p>Logged in as: <strong><?php echo $_SESSION['username']; ?></strong></p>
+	<p><a href="profile.php">your profile</a></p>
+	<p><a href="index.php?logout='1'" style="color: red;">logout</a></p>
 <?php endif ?>
 
 <hr>

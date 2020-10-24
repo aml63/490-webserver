@@ -24,9 +24,15 @@ function HandleLoginResponse(response)
 
 function SendLoginRequest()
 {
-	console.log("Doing login request");
 	username = document.getElementById("usr").value;
 	password = document.getElementById("psw").value;
+	
+	if (!username || !password)
+	{
+		alert("Username and password must be a value!");
+		return;
+	}
+	
 	var request = new XMLHttpRequest();
 	request.open("POST","auth.php",true);
 	request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
@@ -57,6 +63,13 @@ function SendRegisterRequest()
 {
 	username = document.getElementById("regusr").value;
 	password = document.getElementById("regpsw").value;
+	
+	if (!username || !password)
+	{
+		alert("Username and password must be a value!");
+		return;
+	}
+	
 	var request = new XMLHttpRequest();
 	request.open("POST","auth.php",true);
 	request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
