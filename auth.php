@@ -41,11 +41,11 @@ switch ($request["type"])
 		$response = $client->send_request($regRequest);
 		break;
 	case "setbio":
-		$setBioRequest = array();
-		$setBioRequest['type'] = "setbio";
-		$setBioRequest['username'] = $request["uname"];
-		$setBioRequest['newBio'] = $request["newbio"];
-		$response = $client->send_request($setBioRequest);
+		$setBio = array();
+		$setBio['type'] = "setbio";
+		$setBio['username'] = $request["uname"];
+		$setBio['newBio'] = $request["newbio"];
+		$response = $client->send_request($setBio);
 		break;
 	case "getbio":
 		$getBio = array();
@@ -53,6 +53,19 @@ switch ($request["type"])
 		$getBio['username'] = $request["uname"];
 		$response = $client->send_request($getBio);
 		break;
+	case "setcabinet":
+		$setCab = array();
+		$setCab['type'] = "setcabinet";
+		$setCab['username'] = $request["uname"];
+		$setCab['newCabinet'] = $request["newcabinet"];
+		$response = $client->send_request($setCab);
+		break;
+	case "getcabinet":
+		$getCab = array();
+		$getCab['type'] = "getcabinet";
+		$getCab['username'] = $request["uname"];
+		$response = $client->send_request($getCab);
+		break;	
 }
 
 echo json_encode($response);
