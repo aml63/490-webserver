@@ -54,6 +54,11 @@ function SendRequest(url) // Send the request to the API
 	request.send();
 }
 
+function likeDrink(like)
+{
+	console.log(like);
+}
+
 function HandleResponse(response) // Handle the data we got from the API
 {
 	var data = JSON.parse(response); 	// parse the response into json array: data
@@ -66,7 +71,7 @@ function HandleResponse(response) // Handle the data we got from the API
 	{
 		for (drink in data.drinks)
 		{	
-			txt += "<tr><th>"+drink+"</th></tr>";	// The obj # we're on, usually a drink
+			txt += "<tr><th>"+drink+"</th><td><button onclick=likeDrink(`"+data.drinks[drink]['idDrink']+"`)>Like</button></td></tr>";	// The obj # we're on, usually a drink
 			for (obj in data.drinks[drink]) 
 			{	
 				if (data.drinks[drink][String(obj)] != null) // Only include keys with values
