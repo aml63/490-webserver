@@ -27,11 +27,16 @@ div{word-wrap: break-word;}
 	height:500px;
 }
 
-table{
-width:100%;
-border:5px;
+table
+{
+	border: 1px solid black;
+	width:100%;
 }
 
+#listResponse
+{
+	width:33%;
+}
 </style>
 
 <script>
