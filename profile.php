@@ -21,8 +21,17 @@ Profile page content
 <html>
 <style>
 input{width:100%;}
-
 div{word-wrap: break-word;}
+#listResponse{
+	overflow-y:scroll; 
+	height:500px;
+}
+
+table{
+width:100%;
+border:5px;
+}
+
 </style>
 
 <script>
@@ -64,6 +73,60 @@ function SaveEdit()
 	document.getElementById("favorites").innerHTML = newFav;
 }
 
+
+// API SEARCH REQUEST STUFF
+function SendListRequest() // Send the request to the API
+{
+	var url = "https://www.thecocktaildb.com/api/json/v2/9973533/list.php?i=list"; // the url to use to for the request, using input
+	var request = new XMLHttpRequest();
+	request.open("GET", url, true);
+	request.onreadystatechange = function()
+	{
+		if(this.readyState==4 && this.status==200)
+		{
+			HandleListResponse(this.responseText)
+		}
+	}
+	request.send();
+}
+
+function HandleListResponse(response) // Handle the data we got from the API
+{
+	var data = JSON.parse(response); 	// parse the response into json array: data
+	console.log(data);			// print to console for testing
+	var txt = "";				// The text variable we'll be manipulating to insert our data into the page
+	
+	txt += "<table id='SearchResults' border='1'>"
+	
+	if (data.drinks)
+	{
+		for (drink in data.drinks)
+		{	
+			for (obj in data.drinks[drink]) 
+			{	
+				if (data.drinks[drink][String(obj)] != null) // Only include keys with values
+				{
+						// honey, my brain hurts
+						// thank fuck backticks work, also
+						txt += "<tr><td>"+drink+"</td><td>"+data.drinks[drink][String(obj)]+"</td><td><button onclick='addIngredient(`"+data.drinks[drink][String(obj)]+"`)'>add</button></td></tr>";
+				}
+			}
+		}
+	}
+	
+	txt += "</table>"    
+      	document.getElementById("listResponse").innerHTML = txt;
+}
+
+function addIngredient(id)
+{
+	var cabinet = document.getElementById("cabinet");
+	
+	if (cabinet.innerHTML.includes(id))
+		alert("You already have one of those, buddy. I think you've got a problem.");
+	else
+		cabinet.innerHTML += id + ",";
+}
 
 function HandleSetBioResponse(response)
 {
@@ -128,12 +191,17 @@ function SendGetBioRequest()
 
 <hr>
 
-<h2>Cabinet</h2>
-<div id="cabinet">Add drinks to your cabinet!</div>
+<h2>Favorites</h2>
+<div id="favorites"></div>
 
 <hr>
 
-<h2>Favorites</h2>
-<div id="favorites">Keep track of favorites here</div>
+<h2>Cabinet</h2>
+<div id="cabinet"></div>
+<br>
+<button onclick="SendListRequest()">List Ingredients</button>
+<br>
+<div id="listResponse"></div>
+
 </body>
 </html>
