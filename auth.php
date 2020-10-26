@@ -66,6 +66,19 @@ switch ($request["type"])
 		$getCab['username'] = $request["uname"];
 		$response = $client->send_request($getCab);
 		break;	
+	case "addlike":
+		$addLike = array();
+		$addLike['type'] = "addlike";
+		$addLike['username'] = $request["uname"];
+		$addLike['addLike'] = $request["addlike"];
+		$response = $client->send_request($addLike);
+		break;	
+	case "getlikes":
+		$getLikes = array();
+		$getLikes['type'] = "getlikes";
+		$getLikes['username'] = $request["uname"];
+		$response = $client->send_request($getLikes);
+		break;	
 }
 
 echo json_encode($response);

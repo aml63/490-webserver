@@ -13,6 +13,8 @@ if (isset($_GET['logout']))
 	unset($_SESSION['username']);
 	header("location: login.php");
 }
+
+require_once('scripts.php');
 ?>
 
 <html>
@@ -38,120 +40,7 @@ tr:nth-child(even) { border-radius: 10px; background-color: #f2f2f2; }
 td:nth-child(odd) { text-align:right; }
 </style>
 
-<script>
-// API SEARCH REQUEST STUFF
-function SendRequest(url) // Send the request to the API
-{
-	var request = new XMLHttpRequest();
-	request.open("GET", url, true);
-	request.onreadystatechange = function()
-	{
-		if(this.readyState==4 && this.status==200)
-		{
-			HandleResponse(this.responseText)
-		}
-	}
-	request.send();
-}
 
-function likeDrink(like)
-{
-	console.log(like);
-}
-
-function HandleResponse(response) // Handle the data we got from the API
-{
-	var data = JSON.parse(response); 	// parse the response into json array: data
-	console.log(data);			// print to console for testing
-	var txt = "";				// The text variable we'll be manipulating to insert our data into the page
-	
-	txt += "<table id='SearchResults' border='1'>"
-	
-	if (data.drinks)
-	{
-		for (drink in data.drinks)
-		{	
-			txt += "<tr><th>"+drink+"</th><td><button onclick=likeDrink(`"+data.drinks[drink]['idDrink']+"`)>Like</button></td></tr>";	// The obj # we're on, usually a drink
-			for (obj in data.drinks[drink]) 
-			{	
-				if (data.drinks[drink][String(obj)] != null) // Only include keys with values
-				{
-					if (String(obj) == "strCreativeCommonsConfirmed" || String(obj) == "strInstructionsDE") // Skip these
-						continue;
-					else if (String(obj) == "strDrinkThumb")
-						txt += "<tr><td>"+obj+"</td><td><img class='center' src='"+data.drinks[drink][String(obj)]+"' width='300'></td></tr>"; // Insert keys & values for obj
-					else
-						txt += "<tr><td>"+obj+"</td><td>"+data.drinks[drink][String(obj)]+"</td></tr>"; // Insert keys & values for obj
-				}
-			}
-		}
-	}
-	else if (data.ingredients)
-	{
-		for (ingredient in data.ingredients)
-		{
-			txt += "<tr><th>"+drink+"</th></tr>";	// The obj # we're on, in this case an ingredient
-			for (obj in data.ingredients[ingredient])
-			{
-				txt += "<tr><td>"+obj+"</td><td>"+data.ingredients[ingredient][String(obj)]+"</td></tr>"; // Insert keys & values for obj
-			}
-		}
-	}
-	
-	
-	txt += "</table>"    
-      	document.getElementById("searchResponse").innerHTML = txt;
-}
-
-
-// SEARCH FUNCTIONS
-// Do a search - Get info from HTML then send request
-function DoSearch() 
-{
-	var type = document.getElementById("searchType").value;		// the type of search
-	var input = document.getElementById("mySearch").value;		// what the user typed in the search input
-	var url = "https://www.thecocktaildb.com/api/json/v2/9973533/" + type + input; // the url to use to for the request, using input
-	SendRequest(url);
-}
-function DoFilter()
-{
-	// myFilter
-	// alcoholicFilter
-	// categoryFilter
-	// glassFilter
-	
-	//var type 		= document.getElementById("filterType").value;		// the type of search
-	//var input 		= document.getElementById("myFilter").value;		// what the user typed in the search input
-	var alcoholic 	= document.getElementById("alcoholicFilter").value;
-	var category 	= document.getElementById("categoryFilter").value;
-	var glass 		= document.getElementById("glassFilter").value;
-	
-	var url = "https://www.thecocktaildb.com/api/json/v2/9973533/filter.php?" + alcoholic + "&" + category + "&" + glass;
-	
-	SendRequest(url);
-	console.log(url);
-}
-function DoList()
-{
-	var type = document.getElementById("listType").value;		// the type of search
-	var url = "https://www.thecocktaildb.com/api/json/v2/9973533/" + type; // the url to use to for the request, using input
-	SendRequest(url);
-}
-function DoLookup()
-{
-	var type = document.getElementById("lookupType").value;		// the type of search
-	var input = document.getElementById("myLookup").value;		// what the user typed in the search input
-	var url = "https://www.thecocktaildb.com/api/json/v2/9973533/lookup.php?" + type + "=" + input; // the url to use to for the request, using input
-	SendRequest(url);
-}
-
-
-// Clear search results from the page - Not super necessary, but tidy
-function ClearResults()
-{
-	document.getElementById("searchResponse").innerHTML = "";
-}
-</script>
 
 <h1>Liquor Cabinet</h1>
 
