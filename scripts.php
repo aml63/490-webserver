@@ -1,11 +1,14 @@
 <script>
-// Edit info on page
-function EditMode()
+
+// profile.php functions (mainly)
+
+// EDIT AND SAVE
+function EditMode() // Swap to an edit mode
 {
-	// Swap the button
+	// Swap the button to SAVE
 	document.getElementById("editButton").innerHTML = "<button onclick='SaveEdit()'>Save Profile</button>";
 
-	// Get current html 
+	// Get current values right from the HTML, so we can insert it into an editable textarea
 	var currBio = document.getElementById("bio").innerHTML;
 	var currCab = document.getElementById("cabinet").innerHTML;
 	
@@ -16,19 +19,17 @@ function EditMode()
 	document.getElementById("cabinet").innerHTML = "<div id='cabdisc'><strong>**Only add ingredients from list! Don't add spaces! Don't remove tailling comma!**</strong></p><textarea rows='5' cols='90' maxlength='280' id='cabEdit'/>" + currCab + "</textarea>"
 	
 }
-
-// Save what was put in the boxes
-function SaveEdit()
+function SaveEdit() // Save edits, swap back to default view of the page with new values
 {
-	// Get values of input boxes so we can turn it back to content
-	// This needs to get sent to the database and saved, obviously. This is just placeholder stuff.
+	// Swap the button back to EDIT
+	document.getElementById("editButton").innerHTML = "<button onclick='EditMode()'>Edit Profile</button>";
+
+	// Get current values of input boxes, so we can turn it back to content
 	var newBio = document.getElementById("bioEdit").value;
 	var newCab = document.getElementById("cabEdit").value;
 	
-	// Swap the button.
-	document.getElementById("editButton").innerHTML = "<button onclick='EditMode()'>Edit Profile</button>";
-	
-	SendSetRequest(newBio, "setbio"); // save bio to database
+	// Save the edits to db
+	SendSetRequest(newBio, "setbio");
 	SendSetRequest(newCab, "setcabinet");
 	
 	// Transform! Back into content!
@@ -38,18 +39,68 @@ function SaveEdit()
 }
 
 
-// GET & SET
-// Bios are kind of pointless right now because nobody else can see them
-// Can fix this by setting a variable in the post / url when loading profile.php, and get the info from that username instead, but don't allow editing.
+
+
+// CABINET EDITING
+// Fetch an ingredient list and allow users to add stuff to their cabinet while in edit mode.
+function HandleListResponse(response) // Handle the response to format it into the page
+{
+	var data = JSON.parse(response); 	// parse the response into json array: data
+	console.log(data);			// print to console for testing
+	var txt = "";				// The text variable we'll be manipulating to insert our data into the page
+	
+	txt += "<table id='SearchResults' border='1'>"
+	for (drink in data.drinks)
+	{	
+		for (obj in data.drinks[drink]) 
+		{	
+			if (data.drinks[drink][String(obj)] != null) // Only include keys with values
+			{
+					// TODO: Make this skip results already found in the user's cabinet
+					txt += "<tr><td>"+drink+"</td><td>"+data.drinks[drink][String(obj)]+"</td><td><button onclick='addIngredient(`"+data.drinks[drink][String(obj)]+"`)'>add</button></td></tr>";
+			}
+		}
+	}
+	txt += "</table>"    
+      	document.getElementById("listResponse").innerHTML = txt;
+}
+function SendListRequest() // Send the request to the API
+{
+	var url = "https://www.thecocktaildb.com/api/json/v2/9973533/list.php?i=list";
+	var request = new XMLHttpRequest();
+	request.open("GET", url, true);
+	request.onreadystatechange = function()
+	{
+		if(this.readyState==4 && this.status==200)
+		{
+			HandleListResponse(this.responseText)
+		}
+	}
+	request.send();
+}
+function addIngredient(id) // Add an ingredient to user's cabinet, this is called from the "add" button on the ingredient list
+{
+	var cabinet = document.getElementById("cabEdit");
+	
+	if (cabinet.value.includes(id))
+		alert("You already have one of those, buddy. I think you've got a problem.");
+	else
+		cabinet.value += id + ",";
+}
+
+
+
+
+// DATABASE INTERACTION FUNCTIONS
+// Use these to set & get user info like bio, cabinet, likes, etc.
+
+// SET
 function HandleSetResponse(response)
 {
-	// if bio, if cabinet, but we're dealing with strings anyways so might not need to differentiate?
-	var text = JSON.parse(response);
+	var text = JSON.parse(response); // We don't really need a response when setting things.
 }
 function SendSetRequest(info, type)
 {
-	// types: setbio->newbio or setcabinet -> newcabinet
-	
 	username = "<?php echo $_SESSION['username']; ?>";
 	
 	var request = new XMLHttpRequest();
@@ -70,6 +121,7 @@ function SendSetRequest(info, type)
 	else if (type == "addlike")
 		request.send("type="+type+"&uname="+username+"&addlike="+info);
 }
+// GET 
 function HandleGetResponse(response, type)
 {
 	var text = JSON.parse(response);
@@ -104,66 +156,43 @@ function SendGetRequest(type, special)
 }
 
 
-// Handle the response to format it into the page
-function HandleListResponse(response) // Handle the data we got from the API
-{
-	var data = JSON.parse(response); 	// parse the response into json array: data
-	console.log(data);			// print to console for testing
-	var txt = "";				// The text variable we'll be manipulating to insert our data into the page
-	
-	txt += "<table id='SearchResults' border='1'>"
-	for (drink in data.drinks)
-	{	
-		for (obj in data.drinks[drink]) 
-		{	
-			if (data.drinks[drink][String(obj)] != null) // Only include keys with values
-			{
-					// honey, my brain hurts. thank fuck backticks work, also
-					txt += "<tr><td>"+drink+"</td><td>"+data.drinks[drink][String(obj)]+"</td><td><button onclick='addIngredient(`"+data.drinks[drink][String(obj)]+"`)'>add</button></td></tr>";
-			}
-		}
-	}
-	txt += "</table>"    
-      	document.getElementById("listResponse").innerHTML = txt;
-}
-// Fetch ingredient list from API
-function SendListRequest() // Send the request to the API
-{
-	var url = "https://www.thecocktaildb.com/api/json/v2/9973533/list.php?i=list";
-	var request = new XMLHttpRequest();
-	request.open("GET", url, true);
-	request.onreadystatechange = function()
-	{
-		if(this.readyState==4 && this.status==200)
-		{
-			HandleListResponse(this.responseText)
-		}
-	}
-	request.send();
-}
-// Add an ingredient to local page cabinet
-function addIngredient(id)
-{
-	var cabinet = document.getElementById("cabEdit");
-	
-	if (cabinet.value.includes(id))
-		alert("You already have one of those, buddy. I think you've got a problem.");
-	else
-		cabinet.value += id + ",";
-}
 
 
-
-
-
-
-
-
-
-
-// INDEX.PHP functions below
+// index.php functions (mainly)
 
 // API SEARCH REQUEST STUFF
+// SEARCH FUNCTIONS
+// Do a search - Get info from HTML then send request
+function DoSearch() // Basic search - Do a search for recipes
+{
+	var type = document.getElementById("searchType").value;		// the type of search
+	var input = document.getElementById("mySearch").value;		// what the user typed in the search input
+	var url = "https://www.thecocktaildb.com/api/json/v2/9973533/" + type + input; // the url to use to for the request, using input
+	SendRequest(url);
+}
+function DoFilter() // Category search - Get the items in a particular category
+{
+	var alcoholic 	= document.getElementById("alcoholicFilter").value;
+	var category 	= document.getElementById("categoryFilter").value;
+	var glass 		= document.getElementById("glassFilter").value;
+	var url = "https://www.thecocktaildb.com/api/json/v2/9973533/filter.php?" + alcoholic + "&" + category + "&" + glass;
+	SendRequest(url);
+}
+function DoList() // List search - Catered lists like random, 10 random, popular, etc.
+{
+	var type = document.getElementById("listType").value;		// the type of search
+	var url = "https://www.thecocktaildb.com/api/json/v2/9973533/" + type; // the url to use to for the request, using input
+	SendRequest(url);
+}
+function DoLookup() // Lookup drink from 
+{
+	var type = document.getElementById("lookupType").value;		// the type of search
+	var input = document.getElementById("myLookup").value;		// what the user typed in the search input
+	var url = "https://www.thecocktaildb.com/api/json/v2/9973533/lookup.php?" + type + "=" + input; // the url to use to for the request, using input
+	SendRequest(url);
+}
+
+
 function SendRequest(url) // Send the request to the API
 {
 	var request = new XMLHttpRequest();
@@ -177,12 +206,6 @@ function SendRequest(url) // Send the request to the API
 	}
 	request.send();
 }
-
-function likeDrink(like)
-{
-	SendSetRequest(like, "addlike");
-}
-
 function HandleResponse(response) // Handle the data we got from the API
 {
 	var data = JSON.parse(response); 	// parse the response into json array: data
@@ -228,45 +251,9 @@ function HandleResponse(response) // Handle the data we got from the API
 }
 
 
-// SEARCH FUNCTIONS
-// Do a search - Get info from HTML then send request
-function DoSearch() 
+function likeDrink(like) // This is called when the button "like" button in the search results is pressed
 {
-	var type = document.getElementById("searchType").value;		// the type of search
-	var input = document.getElementById("mySearch").value;		// what the user typed in the search input
-	var url = "https://www.thecocktaildb.com/api/json/v2/9973533/" + type + input; // the url to use to for the request, using input
-	SendRequest(url);
-}
-function DoFilter()
-{
-	// myFilter
-	// alcoholicFilter
-	// categoryFilter
-	// glassFilter
-	
-	//var type 		= document.getElementById("filterType").value;		// the type of search
-	//var input 		= document.getElementById("myFilter").value;		// what the user typed in the search input
-	var alcoholic 	= document.getElementById("alcoholicFilter").value;
-	var category 	= document.getElementById("categoryFilter").value;
-	var glass 		= document.getElementById("glassFilter").value;
-	
-	var url = "https://www.thecocktaildb.com/api/json/v2/9973533/filter.php?" + alcoholic + "&" + category + "&" + glass;
-	
-	SendRequest(url);
-	console.log(url);
-}
-function DoList()
-{
-	var type = document.getElementById("listType").value;		// the type of search
-	var url = "https://www.thecocktaildb.com/api/json/v2/9973533/" + type; // the url to use to for the request, using input
-	SendRequest(url);
-}
-function DoLookup()
-{
-	var type = document.getElementById("lookupType").value;		// the type of search
-	var input = document.getElementById("myLookup").value;		// what the user typed in the search input
-	var url = "https://www.thecocktaildb.com/api/json/v2/9973533/lookup.php?" + type + "=" + input; // the url to use to for the request, using input
-	SendRequest(url);
+	SendSetRequest(like, "addlike");  // Appends a drink to the user's likes column
 }
 
 
@@ -274,5 +261,80 @@ function DoLookup()
 function ClearResults()
 {
 	document.getElementById("searchResponse").innerHTML = "";
+}
+
+
+
+
+// login.php functions (mainly)
+
+// LOGIN & REGISTRATION STUFF
+function HandleLoginResponse(response)
+{
+	var text = JSON.parse(response);
+	
+	// Send them to a new page if they were logged in
+	if (response == 1)
+		document.location.href = "index.php"
+	else
+		document.getElementById("loginResponse").innerHTML = "Bad Credentials (response: "+text+")<p>";
+}
+function SendLoginRequest()
+{
+	username = document.getElementById("usr").value;
+	password = document.getElementById("psw").value;
+	
+	if (!username || !password)
+	{
+		alert("Username and password must be a value!");
+		return;
+	}
+	
+	var request = new XMLHttpRequest();
+	request.open("POST","auth.php",true);
+	request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+	request.onreadystatechange = function ()
+	{
+		if ((this.readyState == 4)&&(this.status == 200))
+		{
+			HandleLoginResponse(this.responseText);
+		}		
+	}
+	request.send("type=login&uname="+username+"&pword="+password); // request we're sending thru rabbit?
+}
+
+
+function HandleRegisterResponse(response)
+{
+	var text = JSON.parse(response);
+	
+	// Give them a confirmation that their credentials were registered
+	if (response == 1)
+		document.getElementById("regResponse").innerHTML = "Registered! (code: "+text+")<p>";
+	else if (response == 0)
+		document.getElementById("regResponse").innerHTML = "Already Registered? (code: "+text+")<p>";
+}
+function SendRegisterRequest()
+{
+	username = document.getElementById("regusr").value;
+	password = document.getElementById("regpsw").value;
+	
+	if (!username || !password)
+	{
+		alert("Username and password must be a value!");
+		return;
+	}
+	
+	var request = new XMLHttpRequest();
+	request.open("POST","auth.php",true);
+	request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+	request.onreadystatechange = function ()
+	{
+		if ((this.readyState == 4)&&(this.status == 200))
+		{
+			HandleRegisterResponse(this.responseText);
+		}
+	}
+	request.send("type=register&uname="+username+"&pword="+password); // request we're sending thru rabbit?
 }
 </script>

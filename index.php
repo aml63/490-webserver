@@ -1,12 +1,14 @@
 <?php 
 session_start(); 
 
+// Check if username is set, if not, go to login page.
 if (!isset($_SESSION['username'])) 
 {
 	$_SESSION['msg'] = "You must log in first";
 	header('location: login.php');
 }
 
+// Handles logout, sends back to login page
 if (isset($_GET['logout'])) 
 {
 	session_destroy();
@@ -18,6 +20,9 @@ require_once('scripts.php');
 ?>
 
 <html>
+
+<!-- CSS -->
+
 <style>
 .center {
 	display: block;
@@ -40,10 +45,11 @@ tr:nth-child(even) { border-radius: 10px; background-color: #f2f2f2; }
 td:nth-child(odd) { text-align:right; }
 </style>
 
-
+<!-- Index Page - All searches are done here -->
 
 <h1>Liquor Cabinet</h1>
 
+<!-- Nav options -->
 <?php  if (isset($_SESSION['username'])) : ?>
 	<p>Logged in as: <strong><?php echo $_SESSION['username']; ?></strong></p>
 	<p><a href="profile.php">your profile</a></p>
@@ -141,10 +147,10 @@ That, or we can make several different requests instead of one with each filter 
 <hr>
 
 <!--
-List will basically load up some results determined by the API
+List will basically load up some results determined by the API. Nothing fancy.
 -->
 <h3>List</h3>
-<p>Pull up a set list of drinks</p>
+<p>Pull up a catered list of drinks</p>
 <select name="list type" id="listType">
 	<option value="random.php">1 Random</option>
 	<option value="randomselection.php">10 Random</option>
@@ -174,7 +180,8 @@ ID Lookup does exactly what it says; the API has IDs for each cocktail & ingredi
 <hr>
 
 <!--
-Search results get inserted here
+Search results show up here. They are inserted into the div searchResponse.
+May get rid of the button to clear results, as it's not really needed.
 -->
 <button style="font-size: 150%; width:100%;" onclick="ClearResults()">Clear Results</button>
 <br>
