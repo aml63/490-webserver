@@ -136,7 +136,7 @@ function HandleGetResponse(response, type)
 			document.getElementById("cabinet").innerHTML = text.cabinet;
 	if (type == "getlikes")
 		if (text.likes != null)
-			document.getElementById("favorites").innerHTML = text.likes;
+			ID2Name(text.likes);
 }
 function SendGetRequest(type, special)
 {
@@ -256,6 +256,48 @@ function likeDrink(like) // This is called when the button "like" button in the 
 	SendSetRequest(like, "addlike");  // Appends a drink to the user's likes column
 }
 
+function ID2Name(id) // Translate individual likes from database and pulling info from API to get drink name and image
+{
+	var idArr = id.split(','); // translate commas in database to arrays
+	var txt = "";
+	txt += "<table border='1'>"
+	txt += "<tr><th>index</th><th>name</th><th>image</th></tr>";
+	for (i = 0; i < idArr.length; i++) // array using for loop
+	{
+		var url = "https://www.thecocktaildb.com/api/json/v2/9973533/lookup.php?i=" + idArr[i];
+		var request = new XMLHttpRequest();
+		request.open("GET", url, false); // syncronous xhr request
+		request.send();
+		if(request.status==200)
+		{ 
+			var data = JSON.parse(request.responseText); 	// parse the response into json array: data
+			console.log(data);				// print to console for testing
+
+			if (data.drinks)
+			{
+				for (drink in data.drinks)
+				{	
+					txt += "<tr><td>" + i + "</td>";
+					for (obj in data.drinks[drink]) 
+					{	
+						if (data.drinks[drink][String(obj)] != null) // Only include keys with values
+						{
+							if (String(obj) == "strCreativeCommonsConfirmed" || String(obj) == "strInstructionsDE") // Skip these
+								continue;
+							else if (String(obj) == "strDrinkThumb")
+								txt += "<td style='text-align: center'><img class='center' src='"+data.drinks[drink][String(obj)]+"' width='300'></td>"; // Insert drink image
+							else if (String(obj) == "strDrink")
+								txt += "<td>"+data.drinks[drink]['strDrink']+"</td>"; // Insert drink name
+						}
+					}
+					txt += "</tr>";
+				}
+			}
+		}
+	}
+	txt += "</table>";
+	document.getElementById("favorites").innerHTML = txt;
+}
 
 // Clear search results from the page - Not super necessary, but tidy
 function ClearResults()
