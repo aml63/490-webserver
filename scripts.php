@@ -2,7 +2,7 @@
 
 // profile.php functions (mainly)
 
-// EDIT AND SAVE
+// Profile - EDIT AND SAVE
 function EditMode() // Swap to an edit mode
 {
 	// Swap the button to SAVE
@@ -41,7 +41,7 @@ function SaveEdit() // Save edits, swap back to default view of the page with ne
 
 
 
-// CABINET EDITING
+// Profile - CABINET EDITING
 // Fetch an ingredient list and allow users to add stuff to their cabinet while in edit mode.
 function HandleListResponse(response) // Handle the response to format it into the page
 {
@@ -137,10 +137,21 @@ function HandleGetResponse(response, type)
 	if (type == "getlikes")
 		if (text.likes != null)
 			ID2Name(text.likes);
+	if (type == "getlikestats") // TODO: Sort this list by likes before filling the table
+		if (text != null)
+		{
+			var txt = "<table border='1'><th>Drink ID</th><th>Likes</th>";
+			for (index in text)
+			{
+				txt += "<tr><td>"+text[index].id+"</td><td>"+text[index].likes+"</td></tr>"; // TODO: text.dislikes 
+			}
+			txt += "</table>"
+			document.getElementById("drinkLikes").innerHTML=txt;
+		}
 }
-function SendGetRequest(type, special)
+function SendGetRequest(type)
 {
-	var username = "<?php echo $_SESSION['username']; ?>";
+	var username = "<?php echo $_SESSION['username']; ?>"; // username or some other ID, like a drink
 	
 	var request = new XMLHttpRequest();
 	request.open("POST","auth.php",true);
@@ -149,7 +160,7 @@ function SendGetRequest(type, special)
 	{
 		if ((this.readyState == 4)&&(this.status == 200))
 		{
-			HandleGetResponse(this.responseText, type, special);
+			HandleGetResponse(this.responseText, type);
 		}		
 	}
 	request.send("type="+String(type)+"&uname="+username);
@@ -160,9 +171,7 @@ function SendGetRequest(type, special)
 
 // index.php functions (mainly)
 
-// API SEARCH REQUEST STUFF
-// SEARCH FUNCTIONS
-// Do a search - Get info from HTML then send request
+// API SEARCH/REQUEST STUFF
 function DoSearch() // Basic search - Do a search for recipes
 {
 	var type = document.getElementById("searchType").value;		// the type of search
@@ -209,14 +218,14 @@ function SendRequest(url) // Send the request to the API
 function HandleResponse(response) // Handle the data we got from the API
 {
 	var data = JSON.parse(response); 	// parse the response into json array: data
-	console.log(data);			// print to console for testing
-	var txt = "";				// The text variable we'll be manipulating to insert our data into the page
+	console.log(data);					// print to console for testing
+	var txt = "";						// The text variable we'll be manipulating to insert our HTML into our div
 	
 	txt += "<table id='SearchResults' border='1'>"
 	
 	if (data.drinks)
 	{
-		for (drink in data.drinks)
+		for (drink in data.drinks) // This is where we begin iterating through the JSON data and stuffing it into an HTML table
 		{	
 			txt += "<tr><th>"+drink+"</th><td><button onclick=likeDrink(`"+data.drinks[drink]['idDrink']+"`)>Like</button></td></tr>";	// The obj # we're on, usually a drink
 			for (obj in data.drinks[drink]) 
@@ -233,7 +242,7 @@ function HandleResponse(response) // Handle the data we got from the API
 			}
 		}
 	}
-	else if (data.ingredients)
+	else if (data.ingredients) // For ingredients, the data comes back in "ingredients" as opposed to drinks, sometimes.
 	{
 		for (ingredient in data.ingredients)
 		{
@@ -247,7 +256,7 @@ function HandleResponse(response) // Handle the data we got from the API
 	
 	
 	txt += "</table>"    
-      	document.getElementById("searchResponse").innerHTML = txt;
+      	document.getElementById("searchResponse").innerHTML = txt; // Set div content to txt
 }
 
 

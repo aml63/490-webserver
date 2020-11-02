@@ -26,7 +26,8 @@ require_once('scripts.php');
 <style>
 input{ width:100%; }
 div{ word-wrap: break-word; }
-#listResponse{ overflow-y:scroll; height:500px; width:33%}
+#listResponse{ overflow-y:scroll; height:500px; width:33%; }
+#favorites{ overflow-y:scroll; height:500px; width:33%; }
 table{ border: 1px solid black; width:100%; }
 </style>
 
@@ -40,6 +41,7 @@ TODO: Make it so other user's profiles can be viewed, obviosuly without edit opt
 <!-- Nav options -->
 <h1><?php echo $_SESSION['username']; ?></h1>
 <p><a href="index.php">home</a></p>
+<p><a href="social.php">social</a></p>
 <p><a href="index.php?logout='1'" style="color: red;">logout</a></p>
 
 <!-- Edit Button - transform the page to allow editing. TODO: add option to remove liked drinks? -->

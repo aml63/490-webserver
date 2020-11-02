@@ -15,11 +15,15 @@ if (!isset($_POST))
 	echo json_encode($msg);
 	exit(0);
 }
+
 $request = $_POST;
 $response = "unsupported request type, politely FUCK OFF";
+
+/*
+This is where we send requests
+*/
 switch ($request["type"])
 {
-	// request.send("type=login&uname="+username+"&pword="+password)
 	case "login":
 		$loginRequest = array();
 		$loginRequest['type'] = "login";
@@ -79,6 +83,11 @@ switch ($request["type"])
 		$getLikes['username'] = $request["uname"];
 		$response = $client->send_request($getLikes);
 		break;	
+	case "getlikestats":
+		$gls = array();
+		$gls['type'] = "getlikestats";
+		$gls['id'] = $request["uname"];
+		$response = $client->send_request($gls);
 }
 
 echo json_encode($response);
