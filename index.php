@@ -57,10 +57,8 @@ td:nth-child(odd) { text-align:right; }
 	<p><a href="index.php?logout='1'" style="color: red;">logout</a></p>
 <?php endif ?>
 
-<hr>
-
 <script>
-function OpenCabinet()
+function OpenCabinet() // Called when "open cabinet" button is pressed
 {
 	var cabinet = document.getElementById("cabinet").innerHTML;
 	var html = "";
@@ -78,8 +76,7 @@ function OpenCabinet()
 	document.getElementById("searchType").value = "filter.php?i=";
 	document.getElementById("visibleCabinet").innerHTML = html;
 }
-
-function AddToSearch(item)
+function AddToSearch(item)	// Called when cabinet buttons are pressed - adds that respective button to the search
 {
 	var srch = document.getElementById("mySearch");
 	if (srch.value == "")
@@ -87,13 +84,58 @@ function AddToSearch(item)
 	else
 		srch.value += ","+item;
 }
+
+function GetRecommendation()
+{
+	var favs = document.getElementById("favorites").innerHTML;
+	favs = favs.split(',');
+	
+	console.log(favs[rangeRand(favs.length-1)]);
+	
+	// You liked this drink: (drink name)
+	// This drink is a: (category)
+	// It's made of: (ingredients?)
+}
+function SendRecRequest(url) // Send the request to the API
+{
+	var request = new XMLHttpRequest();
+	request.open("GET", url, true);
+	request.onreadystatechange = function()
+	{
+		if(this.readyState==4 && this.status==200)
+		{
+			HandleResponse(this.responseText)
+		}
+	}
+	request.send();
+}
+function HandleRecResponse(response) // Handle the data we got from the API
+{
+	var data = JSON.parse(response); 	// parse the response into json array: data
+	console.log(data);					// print to console for testing
+	var txt = "";						// The text variable we'll be manipulating to insert our HTML into our div
+	
+}
+
+// Just a helper function for random numbers
+function rangeRand(max) 
+{
+  return parseInt(Math.random() * (max+1));
+}
 </script>
 
 <!--
 Regular search
 Returns a list of drinks with all their information displayed already.
 -->
-<body onload="SendGetRequest('getcabinet');">
+<body onload="SendGetRequest('getcabinet'); SendGetRequest('getlikes', 1);">
+
+<hr>
+<h4>Recommendations</h4>
+<button id="recommend" onclick="GetRecommendation()">Get Recommendation</button>
+<div hidden id="favorites"></div>
+
+<hr>
 <h3>Search</h3>
 <p>Lookup drinks by <strong>name</strong> or <strong>first letter.</strong></p>
 <p>Lookup ingredient by <strong>name</strong>.</p>

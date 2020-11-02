@@ -122,7 +122,7 @@ function SendSetRequest(info, type)
 		request.send("type="+type+"&uname="+username+"&addlike="+info);
 }
 // GET 
-function HandleGetResponse(response, type)
+function HandleGetResponse(response, type, special)
 {
 	var text = JSON.parse(response);
 	
@@ -132,11 +132,16 @@ function HandleGetResponse(response, type)
 		if (text.bio != null)
 			document.getElementById("bio").innerHTML = text.bio;
 	if (type == "getcabinet")
-		if (text.cabinet != null)
+		//if (text.cabinet != null)
 			document.getElementById("cabinet").innerHTML = text.cabinet;
 	if (type == "getlikes")
 		if (text.likes != null)
-			ID2Name(text.likes);
+		{
+			if (special==1)
+				document.getElementById("favorites").innerHTML = text.likes;
+			else
+				ID2Name(text.likes);
+		}
 	if (type == "getlikestats") // TODO: Sort this list by likes before filling the table
 		if (text != null)
 		{
@@ -149,7 +154,7 @@ function HandleGetResponse(response, type)
 			document.getElementById("drinkLikes").innerHTML=txt;
 		}
 }
-function SendGetRequest(type)
+function SendGetRequest(type, special)
 {
 	var username = "<?php echo $_SESSION['username']; ?>"; // username or some other ID, like a drink
 	
@@ -160,7 +165,7 @@ function SendGetRequest(type)
 	{
 		if ((this.readyState == 4)&&(this.status == 200))
 		{
-			HandleGetResponse(this.responseText, type);
+			HandleGetResponse(this.responseText, type, special);
 		}		
 	}
 	request.send("type="+String(type)+"&uname="+username);

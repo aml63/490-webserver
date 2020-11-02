@@ -27,7 +27,7 @@ require_once('scripts.php');
 input{ width:100%; }
 div{ word-wrap: break-word; }
 #listResponse{ overflow-y:scroll; height:500px; width:33%; }
-#favorites{ overflow-y:scroll; height:500px; width:33%; }
+#favorites{ overflow-y:scroll; height:300px; width:33%; }
 table{ border: 1px solid black; width:100%; }
 </style>
 
