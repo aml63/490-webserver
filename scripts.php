@@ -270,7 +270,7 @@ function ID2Name(id) // Translate individual likes from database and pulling inf
 	var idArr = id.split(','); // translate commas in database to arrays
 	var txt = "";
 	txt += "<table border='1'>"
-	txt += "<tr><th>index</th><th>name</th><th>image</th></tr>";
+	txt += "<tr><th>ID</th><th>Name</th><th>Image</th></tr>";
 	for (i = 0; i < idArr.length; i++) // array using for loop
 	{
 		var url = "https://www.thecocktaildb.com/api/json/v2/9973533/lookup.php?i=" + idArr[i];
@@ -286,7 +286,7 @@ function ID2Name(id) // Translate individual likes from database and pulling inf
 			{
 				for (drink in data.drinks)
 				{	
-					txt += "<tr><td>" + i + "</td>";
+					txt += "<tr><td>" + idArr[i] + "</td>";
 					for (obj in data.drinks[drink]) 
 					{	
 						if (data.drinks[drink][String(obj)] != null) // Only include keys with values
@@ -294,7 +294,7 @@ function ID2Name(id) // Translate individual likes from database and pulling inf
 							if (String(obj) == "strCreativeCommonsConfirmed" || String(obj) == "strInstructionsDE") // Skip these
 								continue;
 							else if (String(obj) == "strDrinkThumb")
-								txt += "<td style='text-align: center'><img class='center' src='"+data.drinks[drink][String(obj)]+"' width='300'></td>"; // Insert drink image
+								txt += "<td style='text-align: center'><img class='center' src='"+data.drinks[drink][String(obj)]+"' width='150'></td>"; // Insert drink image
 							else if (String(obj) == "strDrink")
 								txt += "<td>"+data.drinks[drink]['strDrink']+"</td>"; // Insert drink name
 						}
