@@ -236,6 +236,8 @@ function HandleResponse(response) // Handle the data we got from the API
 						continue;
 					else if (String(obj) == "strDrinkThumb")
 						txt += "<tr><td>"+obj+"</td><td><img class='center' src='"+data.drinks[drink][String(obj)]+"' width='300'></td></tr>"; // Insert keys & values for obj
+					else if (String(obj) == "idDrink")
+						txt += "<tr><td><button onclick=SendRequest(`https://www.thecocktaildb.com/api/json/v2/9973533/lookup.php?i="+data.drinks[drink][String(obj)]+"`)>"+obj+"</button></td><td>"+data.drinks[drink][String(obj)]+"</td></tr>";
 					else
 						txt += "<tr><td>"+obj+"</td><td>"+data.drinks[drink][String(obj)]+"</td></tr>"; // Insert keys & values for obj
 				}
