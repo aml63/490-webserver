@@ -59,15 +59,45 @@ td:nth-child(odd) { text-align:right; }
 
 <hr>
 
+<script>
+function OpenCabinet()
+{
+	var cabinet = document.getElementById("cabinet").innerHTML;
+	var html = "";
+	cabinet = cabinet.split(',');
+	cabinet = cabinet.filter(item => item);
+	
+	html+="<hr>";
+	
+	for (item in cabinet)
+	{
+		console.log(cabinet[item]);
+		html += "<button onclick='AddToSearch(`"+cabinet[item]+"`)'>"+cabinet[item]+"</buton>";
+	}
+	
+	document.getElementById("searchType").value = "filter.php?i=";
+	document.getElementById("visibleCabinet").innerHTML = html;
+}
+
+function AddToSearch(item)
+{
+	var srch = document.getElementById("mySearch");
+	if (srch.value == "")
+		srch.value += item;
+	else
+		srch.value += ","+item;
+}
+</script>
+
 <!--
 Regular search
 Returns a list of drinks with all their information displayed already.
 -->
-<body>
+<body onload="SendGetRequest('getcabinet');">
 <h3>Search</h3>
-<p>Lookup drinks by name or first letter.</p>
-<p>Lookup ingredient by name.</p>
-<p>Lookup recipes with ingredient combinations. ( EX: rum,vodka,gin )</p>
+<p>Lookup drinks by <strong>name</strong> or <strong>first letter.</strong></p>
+<p>Lookup ingredient by <strong>name</strong>.</p>
+<p>Lookup recipes with ingredient combinations. <strong>( EX: rum,vodka,gin )</strong></p>
 <select name="search type" id="searchType">
 	<option value="search.php?s=">Drink name</option>
 	<option value="search.php?f=">First letter</option>
@@ -76,7 +106,10 @@ Returns a list of drinks with all their information displayed already.
 </select>
 <input type="text" placeholder="Enter your search keywords" id="mySearch" />
 <button onclick="DoSearch()">Search</button>
-
+<button onclick="OpenCabinet()">Open Cabinet</button>
+<br>
+<div id="visibleCabinet"></div>
+<div hidden id="cabinet"></div>
 <hr>
 
 <!--
@@ -151,7 +184,7 @@ That, or we can make several different requests instead of one with each filter 
 List will basically load up some results determined by the API. Nothing fancy.
 -->
 <h3>List</h3>
-<p>Pull up a catered list of drinks</p>
+<p>Pull up a random or catered list of drinks</p>
 <select name="list type" id="listType">
 	<option value="random.php">1 Random</option>
 	<option value="randomselection.php">10 Random</option>
@@ -170,7 +203,7 @@ List will basically load up some results determined by the API. Nothing fancy.
 ID Lookup does exactly what it says; the API has IDs for each cocktail & ingredient
 -->
 <h3>ID Lookup</h3>
-<p>Find a drink recipe or an ingredient's info from its ID</p>
+<p>Find a <strong>drink</strong> recipe or an <strong>ingredient</strong>'s info from its ID</p>
 <select name="lookup type" id="lookupType">
 	<option value="i">Drink ID</option>
 	<option value="iid">Ingredient ID</option>
