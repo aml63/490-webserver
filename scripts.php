@@ -44,24 +44,24 @@ function EditPost()
 {
 
         //swap the button to SAVE
-        document.getElementById("addButton").innerHTML = "<button onclick='Save$
+        document.getElementById("addButton").innerHTML = "<button onclick='SavePost()'>Save Post</button>";
 
         //get current values
         var currComm = document.getElementById("comm").innerHTML;
 
         //transform
-        document.getElementById("comm").innerHTML = "<textarea rows='5' cols='9$
+        document.getElementById("comm").innerHTML = "<textarea rows='5' cols='90' maxlength='280' id='commEdit'/>" + currComm + "</textarea";
 }
 function SavePost()
 {
         //swap back to add
-        document.getElementById("addButton").innerHTML = "<button onclick='Edit$
+        document.getElementById("addButton").innerHTML = "<button onclick='EditPost()'>Add Post</button>";
 
         //get values
         var newComm = document.getElementById("commEdit").value;
 
 	// save edits to db
-	//SendSetRequest(newComm, "setComm";
+	SendSetRequest(newComm, "setComm";
         //transform
         document.gtElementByID("comm").innerHTML = newComm;
 }
