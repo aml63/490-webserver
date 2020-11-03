@@ -118,7 +118,9 @@ function HandleRecResponse(response) // Handle the data we got from the API
 	console.log(data);					// print to console for testing
 	var txt = "";						// The text variable we'll be manipulating to insert our HTML into our div
 	
-	document.getElementById("recommendation").innerHTML;
+	txt += "<br>You liked: <strong>" + data.drinks[0].strDrink + "</strong>, which is a <strong>" + data.drinks[0].strCategory + "</strong><br>";
+	
+	document.getElementById("recommendation").innerHTML = txt;
 }
 </script>
 
@@ -128,11 +130,7 @@ Returns a list of drinks with all their information displayed already.
 -->
 <body onload="SendGetRequest('getcabinet'); SendGetRequest('getlikes', 1);">
 
-<hr>
-<h4>Recommendations</h4>
-<button id="recommend" onclick="GetRecommendation()">Get Recommendation</button>
-<div id="recommendation"></div>
-<div hidden id="favorites"></div>
+
 
 <hr>
 <h3>Search</h3>
@@ -252,7 +250,14 @@ ID Lookup does exactly what it says; the API has IDs for each cocktail & ingredi
 <input type="text" placeholder="Enter your search keywords" id="myLookup" />
 <button onclick="DoLookup()">Search</button>
 
+
 <hr>
+<h4>Recommendations</h4>
+<button id="recommend" onclick="GetRecommendation()">Get Recommendation</button>
+<div id="recommendation"></div>
+<div hidden id="favorites"></div>
+<hr>
+
 
 <!--
 Search results show up here. They are inserted into the div searchResponse.
