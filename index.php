@@ -58,6 +58,7 @@ td:nth-child(odd) { text-align:right; }
 <?php endif ?>
 
 <script>
+// cabinet search features
 function OpenCabinet() // Called when "open cabinet" button is pressed
 {
 	var cabinet = document.getElementById("cabinet").innerHTML;
@@ -85,16 +86,18 @@ function AddToSearch(item)	// Called when cabinet buttons are pressed - adds tha
 		srch.value += ","+item;
 }
 
+// TODO: Lookup a random drink in user's likes, look at category or other info to recommend 
 function GetRecommendation()
 {
 	var favs = document.getElementById("favorites").innerHTML;
 	favs = favs.split(',');
-	
-	console.log(favs[rangeRand(favs.length-1)]);
+	var example = favs[rangeRand(favs.length-1)];
 	
 	// You liked this drink: (drink name)
 	// This drink is a: (category)
 	// It's made of: (ingredients?)
+	
+	SendRecRequest("https://www.thecocktaildb.com/api/json/v2/9973533/lookup.php?i=" + example);
 }
 function SendRecRequest(url) // Send the request to the API
 {
@@ -104,7 +107,7 @@ function SendRecRequest(url) // Send the request to the API
 	{
 		if(this.readyState==4 && this.status==200)
 		{
-			HandleResponse(this.responseText)
+			HandleRecResponse(this.responseText)
 		}
 	}
 	request.send();
@@ -115,12 +118,7 @@ function HandleRecResponse(response) // Handle the data we got from the API
 	console.log(data);					// print to console for testing
 	var txt = "";						// The text variable we'll be manipulating to insert our HTML into our div
 	
-}
-
-// Just a helper function for random numbers
-function rangeRand(max) 
-{
-  return parseInt(Math.random() * (max+1));
+	document.getElementById("recommendation").innerHTML;
 }
 </script>
 
@@ -133,6 +131,7 @@ Returns a list of drinks with all their information displayed already.
 <hr>
 <h4>Recommendations</h4>
 <button id="recommend" onclick="GetRecommendation()">Get Recommendation</button>
+<div id="recommendation"></div>
 <div hidden id="favorites"></div>
 
 <hr>

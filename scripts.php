@@ -395,4 +395,13 @@ function SendRegisterRequest()
 	}
 	request.send("type=register&uname="+username+"&pword="+password); // request we're sending thru rabbit?
 }
+
+
+
+
+// Just a helper function for random numbers
+function rangeRand(max) 
+{
+  return parseInt(Math.random() * (max+1));
+}
 </script>
