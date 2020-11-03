@@ -94,6 +94,22 @@ switch ($request["type"])
 		$logmsg['type'] = "log";
 		$logmsg['msg'] = $request["msg"];
 		$response = $logger->send_request($logmsg);
+
+	case "setcomm":
+                $setComm = array();
+                $setComm['type'] = "setcomm";
+                $setComm['username'] = $request["uname"];
+                $setComm['newComm'] = $request["newcomm"];
+                $response = $client->send_request($setComm);
+                break;
+
+         case "getcomm":
+                $getComm = array();
+                $getComm['type'] = "getcomm";
+                $getComm['username'] = $request["uname"];
+                $response = $client->send_request($getComm);
+                break;
+
 }
 
 echo json_encode($response);
