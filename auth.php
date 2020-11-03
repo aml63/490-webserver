@@ -89,11 +89,13 @@ switch ($request["type"])
 		$gls['type'] = "getlikestats";
 		$gls['id'] = $request["uname"];
 		$response = $client->send_request($gls);
+		break;
 	case "log":
 		$logmsg = array();
 		$logmsg['type'] = "log";
 		$logmsg['msg'] = $request["msg"];
 		$response = $logger->send_request($logmsg);
+		break;
 }
 
 echo json_encode($response);

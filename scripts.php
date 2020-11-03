@@ -424,13 +424,14 @@ function SendRegisterRequest()
 
 
 // Logs
+
 function HandleLog(response)
 {
 	var text = JSON.parse(response);
 }
 function SendLog(msg)
 {	
-	if (!msg)
+	if (msg == null || msg == "")
 		return;
 	
 	var request = new XMLHttpRequest();
@@ -446,6 +447,7 @@ function SendLog(msg)
 	
 	request.send("type=log&msg="+msg); // request we're sending thru rabbit?
 }
+
 
 
 
