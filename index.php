@@ -54,6 +54,7 @@ td:nth-child(odd) { text-align:right; }
 	<p>Logged in as: <strong><?php echo $_SESSION['username']; ?></strong></p>
 	<p><a href="profile.php">your profile</a></p>
 	<p><a href="social.php">social</a></p>
+	<p><a href="community.php">community</a></p>
 	<p><a href="index.php?logout='1'" style="color: red;">logout</a></p>
 <?php endif ?>
 

@@ -39,7 +39,32 @@ function SaveEdit() // Save edits, swap back to default view of the page with ne
 }
 
 
+//Community Posting
+function EditPost()
+{
 
+        //swap the button to SAVE
+        document.getElementById("addButton").innerHTML = "<button onclick='Save$
+
+        //get current values
+        var currComm = document.getElementById("comm").innerHTML;
+
+        //transform
+        document.getElementById("comm").innerHTML = "<textarea rows='5' cols='9$
+}
+function SavePost()
+{
+        //swap back to add
+        document.getElementById("addButton").innerHTML = "<button onclick='Edit$
+
+        //get values
+        var newComm = document.getElementById("commEdit").value;
+
+	// save edits to db
+	//SendSetRequest(newComm, "setComm";
+        //transform
+        document.gtElementByID("comm").innerHTML = newComm;
+}
 
 // Profile - CABINET EDITING
 // Fetch an ingredient list and allow users to add stuff to their cabinet while in edit mode.
