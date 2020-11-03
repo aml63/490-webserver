@@ -8,6 +8,7 @@ require_once('get_host_info.inc');
 require_once('rabbitMQLib.inc');
 
 $client = new rabbitMQClient("testRabbitMQ.ini","testServer");
+$logger = new rabbitMQClient("testRabbitMQ.ini", "testLogger");
 
 if (!isset($_POST))
 {
@@ -88,6 +89,11 @@ switch ($request["type"])
 		$gls['type'] = "getlikestats";
 		$gls['id'] = $request["uname"];
 		$response = $client->send_request($gls);
+	case "log":
+		$logmsg = array();
+		$logmsg['type'] = "log";
+		$logmsg['msg'] = $request["msg"];
+		$response = $logger->send_request($logmsg);
 }
 
 echo json_encode($response);

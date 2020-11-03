@@ -219,6 +219,8 @@ function SendRequest(url) // Send the request to the API
 		}
 	}
 	request.send();
+	
+	SendLog("API Request: " + url);
 }
 function HandleResponse(response) // Handle the data we got from the API
 {
@@ -327,15 +329,21 @@ function ClearResults()
 // login.php functions (mainly)
 
 // LOGIN & REGISTRATION STUFF
-function HandleLoginResponse(response)
+function HandleLoginResponse(response, username)
 {
 	var text = JSON.parse(response);
 	
 	// Send them to a new page if they were logged in
 	if (response == 1)
+	{
 		document.location.href = "index.php"
+		SendLog("succesful login by: " + username);
+	}
 	else
+	{
 		document.getElementById("loginResponse").innerHTML = "Bad Credentials (response: "+text+")<p>";
+		SendLog("failed login by: " + username);
+	}
 }
 function SendLoginRequest()
 {
@@ -355,22 +363,33 @@ function SendLoginRequest()
 	{
 		if ((this.readyState == 4)&&(this.status == 200))
 		{
-			HandleLoginResponse(this.responseText);
+			HandleLoginResponse(this.responseText, username);
 		}		
 	}
-	request.send("type=login&uname="+username+"&pword="+password); // request we're sending thru rabbit?
+	
+	url = "type=login&uname="+username+"&pword="+password;
+	
+	request.send(url); // request we're sending thru rabbit?
+	
+	SendLog("login attempt by: " + username);
 }
 
 
-function HandleRegisterResponse(response)
+function HandleRegisterResponse(response, username)
 {
 	var text = JSON.parse(response);
 	
 	// Give them a confirmation that their credentials were registered
 	if (response == 1)
+	{
 		document.getElementById("regResponse").innerHTML = "Registered! (code: "+text+")<p>";
+		SendLog("succesful registration by: " + username);
+	}
 	else if (response == 0)
+	{
 		document.getElementById("regResponse").innerHTML = "Already Registered? (code: "+text+")<p>";
+		SendLog("failed registration by: " + username + ". Code: " + text);
+	}
 }
 function SendRegisterRequest()
 {
@@ -390,10 +409,42 @@ function SendRegisterRequest()
 	{
 		if ((this.readyState == 4)&&(this.status == 200))
 		{
-			HandleRegisterResponse(this.responseText);
+			HandleRegisterResponse(this.responseText, username);
 		}
 	}
-	request.send("type=register&uname="+username+"&pword="+password); // request we're sending thru rabbit?
+	
+	url = "type=register&uname="+username+"&pword="+password;
+	
+	request.send(url); // request we're sending thru rabbit?
+	
+	SendLog("registration attempt by: " + username);
+}
+
+
+
+
+// Logs
+function HandleLog(response)
+{
+	var text = JSON.parse(response);
+}
+function SendLog(msg)
+{	
+	if (!msg)
+		return;
+	
+	var request = new XMLHttpRequest();
+	request.open("POST","auth.php",true);
+	request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+	request.onreadystatechange = function ()
+	{
+		if ((this.readyState == 4)&&(this.status == 200))
+		{
+			HandleLog(this.responseText);
+		}		
+	}
+	
+	request.send("type=log&msg="+msg); // request we're sending thru rabbit?
 }
 
 
